@@ -71,24 +71,58 @@ TEST COORDINATES 2: 19.037, 72.873
 TEST COORDINATES 2: -33.933, 18.474
 */
 
-const whereAmI = function(lat, long) {
-  fetch(`https://geocode.xyz/${lat},${long}?geoit=json`)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.log(error.message))
-}
+// const whereAmI = function(lat, long) {
+//   fetch(`https://geocode.xyz/${lat},${long}?geoit=json`)
+//   .then(response => response.json())
+//   .then(data => console.log(data))
+//   .catch(error => console.log(error.message))
+// }
 // whereAmI(52.508, 13.381);
 
 
-// ===============================Creating Own Promise===========================//
+///////////////////////////////////////
+// The Event Loop in Practice
 
-const MyPromis = new Promise(function(resolve, reject){
-  if(1 === 1) {
-    resolve('value is same');
-  } else {
-    reject('value is different');
+/*
+  here first print top level or out of block code which is log start and end
+  after that resolve promise is print becuase promise callback has high priority
+  and at the end timer function is printed
+*/
+// console.log('Test start');
+// setTimeout(() => console.log('0 sec timer'), 0);
+// Promise.resolve('Resolved promise 1').then(res => console.log(res));
+
+// Promise.resolve('Resolved promise 2').then(res => {
+//   for (let i = 0; i < 1000; i++) {}
+//   console.log(res);
+// });
+
+// console.log('Test end');
+
+// ===============================Creating Own Promise=========================== //
+
+// const MyPromis = new Promise(function(resolve, reject){
+//   if(1 === 1) {
+//     resolve('value is same');
+//   } else {
+//     reject('value is different');
+//   }
+// });
+
+// // consume promise
+// MyPromis.then(res => console.log(res)).catch(err => console.log(err));
+
+
+// Async &&& Await
+const whereAmI = async function(country) {
+  try {
+    const countryData = await fetch(`https://restcountries.com/v2/name/${country}`);
+    if(!countryData.ok) throw new Error('failded to fetch');
+    const [data] = await countryData.json();
+    console.log(data);
+  } catch(err) {
+    console.error(err);
   }
-});
+}
 
-// consume promise
-MyPromis.then(res => console.log(res)).catch(err => console.log(err));
+whereAmI("Bharat Ganrajya");
