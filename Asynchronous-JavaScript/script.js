@@ -1,8 +1,8 @@
 // Old Way To AJAX Call: XMLHttpRequest
-const countriesContainer = document.querySelector('.countries');
+const countriesContainer = document.querySelector(".countries");
 
-function renderHtml (data) {
-    const html = `
+function renderHtml(data) {
+  const html = `
   <article class="country">
     <img class="country__img" src="${data.flag}" />
     <div class="country__data">
@@ -16,8 +16,8 @@ function renderHtml (data) {
     </div>
   </article>
   `;
-    countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
+  countriesContainer.insertAdjacentHTML("beforeend", html);
+  countriesContainer.style.opacity = 1;
 }
 // const getCountryData = function (country) {
 //   const request = new XMLHttpRequest();
@@ -40,14 +40,13 @@ function renderHtml (data) {
 //     .then(response => {
 //       if(!response.ok) throw new Error('country not found') // throw error will handle in catch
 //       return response.json()
-//     }) // it will also return promise 
+//     }) // it will also return promise
 //     .then(data => renderHtml(data[0]))
 //     .catch(error => console.log(error.message))
 //     .finally(()=>console.log('finally block'));
 // }
 
 // countryData('bbaqss');
-
 
 /* 
 In this challenge you will build a function 'whereAmI' which renders a country ONLY based on GPS coordinates. For that, you will use a second API to geocode coordinates.
@@ -78,7 +77,6 @@ TEST COORDINATES 2: -33.933, 18.474
 //   .catch(error => console.log(error.message))
 // }
 // whereAmI(52.508, 13.381);
-
 
 ///////////////////////////////////////
 // The Event Loop in Practice
@@ -112,17 +110,95 @@ TEST COORDINATES 2: -33.933, 18.474
 // // consume promise
 // MyPromis.then(res => console.log(res)).catch(err => console.log(err));
 
-
 // Async &&& Await
-const whereAmI = async function(country) {
+const whereAmI = async function (country) {
   try {
-    const countryData = await fetch(`https://restcountries.com/v2/name/${country}`);
-    if(!countryData.ok) throw new Error('failded to fetch');
+    const countryData = await fetch(
+      `https://restcountries.com/v2/name/${country}`
+    );
+    if (!countryData.ok) throw new Error("failded to fetch");
+    // return countryData.json();
     const [data] = await countryData.json();
     console.log(data);
-  } catch(err) {
+    // return `My country name is ${data.name}`;
+  } catch (err) {
     console.error(err);
   }
-}
+};
 
-whereAmI("Bharat Ganrajya");
+// (async function(){
+//   const data = await whereAmI("Bharat Ganrajya");
+//   console.log(data);
+// })();
+
+const getPlaceByZipCode = async function (code, zcode) {
+  try {
+    const countryData = await fetch(
+      `http://api.zippopotam.us/${code}/${zcode}`
+    );
+    if (!countryData.ok) throw new Error("failded to fetch");
+    return countryData.json();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// Run Promise Parallel
+const places = async function () {
+  try {
+    const [data1, data2, data3] = await Promise.all([
+      getPlaceByZipCode("IN", "110001 "),
+      getPlaceByZipCode("AR", "1601"),
+      getPlaceByZipCode("AT", "1010"),
+    ]);
+    console.log(data1, data2, data3);
+  } catch (err) {
+    console.log(err);
+  }
+};
+// places();
+
+// Promise.race => whatever promise is setteled first is returned
+const timeout = function (sec) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      reject(new Error("Request time out!"));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getPlaceByZipCode("IN", "110001"),
+  getPlaceByZipCode("AR", "1601"),
+  getPlaceByZipCode("AT", "1010"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+
+// difference between all and allsettled all will return reject promise if any and allsettled will simply return all resolve promise either it fullfilled or reject
+
+Promise.all([
+  Promise.resolve("success"),
+  Promise.reject("error"),
+  Promise.resolve("success"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+// Allsettled combinator
+Promise.allSettled([
+  Promise.resolve("success"),
+  Promise.reject("error"),
+  Promise.resolve("success"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+
+// Any combinator
+// any is similar to race, Difference is any return fullfilled promise only untill all are reject
+Promise.any([
+  Promise.resolve("success"),
+  Promise.reject("error"),
+  Promise.resolve("success"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));

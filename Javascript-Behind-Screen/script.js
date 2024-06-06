@@ -3,7 +3,7 @@
 ///////////////////////////////////////
 // Scoping in Practice
 
-
+/*
 function calcAge(birthYear) {
   const age = 2037 - birthYear;
 
@@ -229,3 +229,20 @@ jessicaCopy.family.push('John');
 
 console.log('Before marriage:', jessica2);
 console.log('After marriage: ', jessicaCopy);
+*/
+
+// type converstion
+const year = '2001';
+console.log(year + 10); // 200110
+console.log(Number(year) + 10); //2011
+
+console.log(Number('Jonas')); // return NaN(invalid number or not a number) which data type is number
+console.log(typeof Number('Jonas')); // type of nan is number
+
+// type coercion
+// plus convert number to string
+console.log('4' + 3); // 43
+// minus convert string to number
+console.log('4' - 3); // 1
+
+// 5 falsy value :0,'',undefiend,null,NaN

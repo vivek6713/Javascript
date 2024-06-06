@@ -8,6 +8,13 @@ const User = function(id, name) {
     this.id = id,
     this.name = name
 }
+/**
+ * when we call constructor function 4 things happen
+ * 1.empty object {} created
+ * 2.call function and empty object set to this keyword 
+ * 3.object link to prototype
+ * 4.function automatically return {}
+ */
 // object created from constructur function called instance
 const vb = new User(1, 'vb');
 // console.log(vb instanceof User); // it give return boolean, if it is instance of user then return true
