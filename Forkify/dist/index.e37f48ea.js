@@ -624,7 +624,7 @@ const controlSearchResults = async function() {
         (0, _resultViewJsDefault.default).render(_modelJs.getSearchResultsPage());
         (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
     } catch (error) {
-        (0, _resultViewJsDefault.default).renderError();
+        (0, _resultViewJsDefault.default).renderError(error);
     }
 };
 const controlPagination = function(goToPage) {
@@ -2607,7 +2607,7 @@ const getJson = async function(url) {
         if (!res.ok) throw new Error(data.message);
         return data;
     } catch (err) {
-        throw err;
+        throw err.message;
     }
 };
 
@@ -2750,6 +2750,7 @@ var _iconsSvg = require("../../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class View {
     data;
+    errorMessage = "Not Found";
     render(data) {
         this.data = data;
         const markup = this.generateMarkup();
@@ -2766,6 +2767,7 @@ class View {
         this.parentElement.insertAdjacentHTML("afterbegin", markup);
     };
     renderError(message = this.errorMessage) {
+        console.log(message);
         const markup = `
       <div class="error">
         <div>

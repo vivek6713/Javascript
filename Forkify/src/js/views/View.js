@@ -2,6 +2,7 @@ import icon from "../../img/icons.svg";
 
 export default class View {
   data;
+  errorMessage = "Not Found";
   render(data) {
     this.data = data;
     const markup = this.generateMarkup();
@@ -20,6 +21,7 @@ export default class View {
   };
 
   renderError(message = this.errorMessage) {
+    console.log(message);
     const markup = `
       <div class="error">
         <div>
